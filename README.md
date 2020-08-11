@@ -78,4 +78,6 @@ $ source .env/bin/activate
 ## Authors ✒️
 * **Pablo Atoche** - *Initial work* - [PalituxD](https://github.com/PalituxD)
 
-## Licencia 📄
+## License 📄
+
+* Apache license 2.0
