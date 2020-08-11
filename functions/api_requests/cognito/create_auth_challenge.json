@@ -1,0 +1,27 @@
+{
+    "version": "1",
+    "region": "us-east-1",
+    "userPoolId": "us-east-1_RQg521F6v",
+    "userName": "96826c44-a2fc-4332-886b-adb1e6c6815e",
+    "callerContext": {
+        "awsSdkVersion": "aws-sdk-unknown-unknown",
+        "clientId": "1ect5n53sdguc0b8ddds0dsc3g"
+    },
+    "triggerSource": "CreateAuthChallenge_Authentication",
+    "request": {
+        "userAttributes": {
+            "sub": "96826c44-a2fc-4332-886b-adb1e6c6815e",
+            "cognito:user_status": "CONFIRMED",
+            "phone_number_verified": "false",
+            "phone_number": "+51999999999"
+        },
+        "challengeName": "CUSTOM_CHALLENGE",
+        "session": [],
+        "userNotFound": False
+    },
+    "response": {
+        "publicChallengeParameters": None,
+        "privateChallengeParameters": None,
+        "challengeMetadata": None
+    }
+}

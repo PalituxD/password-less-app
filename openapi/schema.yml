@@ -1,0 +1,111 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: PasswordLessAppAPI
+servers:
+  - url: "https://GENERATED-API-GATEWAY.us-east-1.amazonaws.com/"
+paths:
+  /sign_up:
+    post:
+      description: Post for Signing up
+      summary: Sign up
+      tags:
+        - sign up
+      responses:
+        "201":
+          description: OK - Order created
+      operationId: sign_up_op
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone_number:
+                  type: string
+                  description: target phone number
+                device_key:
+                  type: string
+                  description: phone id
+              required:
+                - phone_number
+                  device_key
+            examples:
+              example-1:
+                value:
+                  phone_number: "+51999999999"
+                  device_key: "MY_DEVICE"
+        description: Body example
+  /sign_in:
+    post:
+      description: Post for Signing in
+      summary: Sign in
+      tags:
+        - sign in
+      responses:
+        "200":
+          description: OK - User created
+      operationId: sign_in_op
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: It is user id that cognito assigns to a new user, it comes in sign-up response <ChallengeParameters.USERNAME>
+                answer:
+                  type: string
+                  description: Challenge that was sent to mobile phone or alternative verified email
+                session:
+                  type: string
+                  description: it comes in sign-up response <Session>
+              required:
+                - username
+                  answer
+                  session
+        description: Body example
+  /refresh_token:
+    post:
+      description: Post for Refreshing token
+      summary: Refresh token
+      tags:
+        - Refresh token
+      responses:
+        "200":
+          description: OK - Token refreshed
+      operationId: refresh_token_op
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  description: it comes in sign-in response <AuthenticationResult.RefreshToken>
+                device_key:
+                  type: string
+                  description: phone id
+              required:
+                - refresh_token
+                  device_key
+        description: Body example
+  /secured/call:
+    get:
+      description: Post for calling secured call, it is important set the authentication token as Bearer Token
+      summary: secured call
+      tags:
+        - call in
+      responses:
+        "200":
+          description: OK - PasswordLess works!
+      operationId: private
+      parameters:
+        - name: param1
+          in: query
+          schema:
+            type: string
+          required: true
+          description: This param will be returned

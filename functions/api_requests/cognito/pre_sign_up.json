@@ -1,0 +1,24 @@
+{
+    "version": "1",
+    "region": "us-east-1",
+    "userPoolId": "us-east-1_RQg521F6v",
+    "userName": "96826c44-a2fc-4332-886b-adb1e6c6815e",
+    "callerContext": {
+        "awsSdkVersion": "aws-sdk-unknown-unknown",
+        "clientId": "1ect5n53sdguc0b8ddds0dsc3g"
+    },
+    "triggerSource": "PreSignUp_SignUp",
+    "request": {
+        "userAttributes": {
+            "phone_number": "+51942520846"
+        },
+        "validationData": {
+            "phone_number": "string"
+        }
+    },
+    "response": {
+        "autoConfirmUser": False,
+        "autoVerifyEmail": False,
+        "autoVerifyPhone": False
+    }
+}

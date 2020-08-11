@@ -1,0 +1,13 @@
+Resources:
+  CognitoUserPoolClientPasswordLessClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: ${self:custom.userPoolClientName}
+      UserPoolId:
+        Ref: CognitoUserPoolPasswordLessPool
+      ExplicitAuthFlows:
+        - ALLOW_CUSTOM_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      GenerateSecret: False
+      PreventUserExistenceErrors: "ENABLED"
+      RefreshTokenValidity: 365

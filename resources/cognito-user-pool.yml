@@ -1,0 +1,27 @@
+Resources:
+  CognitoUserPoolPasswordLessPool:
+    Type: "AWS::Cognito::UserPool"
+    Properties:
+      UserPoolName: ${self:custom.userPoolName}
+      UsernameAttributes:
+        - phone_number
+      UsernameConfiguration:
+        CaseSensitive: False
+      MfaConfiguration: OFF
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: False
+          RequireNumbers: False
+          RequireSymbols: False
+          RequireUppercase: False
+      Schema:
+        - AttributeDataType: String
+          Mutable: False
+          Name: phone_number
+          Required: True
+        - AttributeDataType: String
+          Mutable: True
+          Name: custom_attribute
+          Required: False
+          DeveloperOnlyAttribute: False

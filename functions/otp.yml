@@ -1,0 +1,111 @@
+pre-sign-up:
+  handler: functions/otp/pre_sign_up.handler
+  role: RoleMonitoringLogs
+  package:
+    individually: True
+    include:
+      - functions/otp/pre_sign_up.py
+    exclude:
+      - ./**
+  events:
+    - cognitoUserPool:
+        pool: PasswordLessPool
+        trigger: PreSignUp
+define-auth-challenge:
+  handler: functions/otp/define_auth_challenge.handler
+  role: RoleMonitoringLogs
+  package:
+    individually: True
+    include:
+      - functions/otp/define_auth_challenge.py
+    exclude:
+      - ./**
+  events:
+    - cognitoUserPool:
+        pool: PasswordLessPool
+        trigger: DefineAuthChallenge
+create-auth-challenge:
+  handler: functions/otp/create_auth_challenge.handler
+  role: RoleNotificationSender
+  timeout: 10
+  environment:
+    SMS_MESSAGE_CODE: "PasswordLess: Tu codigo secreto es: ####"
+    ALTERNATIVE_SOURCE_VERIFIED_EMAIL: "alternative_verified_email@test.com"
+    ALTERNATIVE_TO_VERIFIED_EMAIL: "alternative_verified_email@test.com"
+    SEND_CODE_TO_ALTERNATIVE_VERIFIED_EMAIL: "True"
+  package:
+    individually: True
+    include:
+      - functions/otp/create_auth_challenge.py
+    exclude:
+      - ./**
+  events:
+    - cognitoUserPool:
+        pool: PasswordLessPool
+        trigger: CreateAuthChallenge
+verify-auth-challenge-response:
+  handler: functions/otp/verify_auth_challenge_response.handler
+  role: RoleMonitoringLogs
+  package:
+    individually: True
+    include:
+      - functions/otp/verify_auth_challenge_response.py
+    exclude:
+      - ./**
+  events:
+    - cognitoUserPool:
+        pool: PasswordLessPool
+        trigger: VerifyAuthChallengeResponse
+sign_up:
+  handler: functions/otp/sign_up.handler
+  role: RoleCognitoConsumer
+  timeout: 15
+  package:
+    individually: True
+    include:
+      - functions/otp/sign_up.py
+    exclude:
+      - ./**
+  events:
+    - httpApi:
+        method: POST
+        path: /sign_up
+  environment:
+    COGNITO_POOL_USER_POOL_ID:
+      Ref: CognitoUserPoolPasswordLessPool
+    COGNITO_POOL_CLIENT_ID:
+      Ref: CognitoUserPoolClientPasswordLessClient
+sign_in:
+  handler: functions/otp/sign_in.handler
+  role: RoleMonitoringLogs
+  timeout: 5
+  package:
+    individually: True
+    include:
+      - functions/otp/sign_in.py
+    exclude:
+      - ./**
+  events:
+    - httpApi:
+        method: POST
+        path: /sign_in
+  environment:
+    COGNITO_POOL_CLIENT_ID:
+      Ref: CognitoUserPoolClientPasswordLessClient
+refresh_token:
+  handler: functions/otp/refresh_token.handler
+  role: RoleMonitoringLogs
+  timeout: 5
+  package:
+    individually: True
+    include:
+      - functions/otp/refresh_token.py
+    exclude:
+      - ./**
+  events:
+    - httpApi:
+        method: POST
+        path: /refresh_token
+  environment:
+    COGNITO_POOL_CLIENT_ID:
+      Ref: CognitoUserPoolClientPasswordLessClient

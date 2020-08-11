@@ -1,0 +1,26 @@
+{
+    "version": "1",
+    "region": "us-east-1",
+    "userPoolId": "us-east-1_RQg521F6v",
+    "userName": "034c3963-f391-4d52-8a77-e5ab562e01ce",
+    "callerContext": {
+        "awsSdkVersion": "aws-sdk-unknown-unknown",
+        "clientId": "1ect5n53sdguc0b8ddds0dsc3g"
+    },
+    "triggerSource": "DefineAuthChallenge_Authentication",
+    "request": {
+        "userAttributes": {
+            "sub": "034c3963-f391-4d52-8a77-e5ab562e01ce",
+            "cognito:user_status": "CONFIRMED",
+            "phone_number_verified": "false",
+            "phone_number": "+51999999999"
+        },
+        "session": [],
+        "userNotFound": False
+    },
+    "response": {
+        "challengeName": None,
+        "issueTokens": None,
+        "failAuthentication": None
+    }
+}
