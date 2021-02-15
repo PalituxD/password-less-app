@@ -1,10 +1,10 @@
-# PasswordLessApp
+#MyAppStack
 
-PasswordLessApp project builds a passwordless stack api in AWS that allows you create your own secured services. The Authentication process is verified using the user's mobile number. A secret code is sent to the user inmeditly after invocation of /sign-up and validated it in /sign-in, the generated JWT could be refreshed using /refresh-token endpoint.
+MyAppStack project contains all services for MyApp application.
 
 ## Quick start guide 🚀
 
-This instructions allow you to build and deploy a passwordless application.
+This instructions allow you to build and deploy a stack for MyApp application.
 
 Check **Deployment** to know how to deploy this project.
 Check **Development** to know how to update this project.
@@ -13,60 +13,98 @@ Check **Development** to know how to update this project.
   - _Node v12 or a later version_
   - _Python v3 or a later version_
   - An AWS account with described permisions in lambda-executor-policy.json file.
-
-### Deployment 🔧
-
+  - pyenv
 ```sh
-$ npm install --silent --no-progress -g serverless
-# Test the serverless installation
+$ brew install pyenv
+$ pyenv install 3.8.2
+$ pyenv install 3.8.6
+$ pyenv global 3.8.2
+$ echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.zshrc
+$ python --version
+```    
+  - poetry
+```sh
+$ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+```
+- Serverless:
+```sh
+$ npm install --silent --no-progress serverless@2.4.0
+$ npm install
 $ sls --version
-# Set your AWS credentials an set a profile name for $APP_PROFILE, in my case I called it as 'deploy'. You could use --overwrite to update an existing profile.
-$ sls config credentials --provider aws --key $AWS_ACCESS_KEY --secret $AWS_SECRET_ACCESS_KEY --profile $APP_PROFILE
-###
-# You can run the command 'source ./env.sh' to load your own environment variables and enable pl-package/pl-deploy/pl-remove functions. If you had edit this file, then you should load the environment changes again.
-# You also can replace them here directly:
-###
-# Build the stack for a custom stage/region/profile
-$ sls package --package ./target/$APP_STAGE --stage $APP_STAGE -v -r $APP_REGION --aws-profile $APP_PROFILE
-# Deploy the stack for a custom stage/region/profile
-$ sls deploy --package ./target/$APP_STAGE --stage $APP_STAGE -v -r $APP_REGION --aws-profile $APP_PROFILE
-# To remove the stack for a custom stage/region/profile
-$ sls remove --package ./target/$APP_STAGE --stage $APP_STAGE -v -r $APP_REGION --aws-profile $APP_PROFILE
 ```
-### Development ⌨️
-
-Open your favorite Terminal and run these commands.
-
+#### Set your AWS credentials
+Set your AWS credentials and set a profile name for $APP_PROFILE, in my case I called it as 'deploy'. You could use --overwrite to update an existing profile.
 ```sh
-$ python3 -m venv .env
-$ source .env/bin/activate
-(.env)$ pip3 install boto3
-# List source files
-(.env)$ ls -la ./functions/otp
+$ sls config credentials --provider aws --key $AWS_ACCESS_KEY --secret $AWS_SECRET_ACCESS_KEY --profile $APP_PROFILE
 ```
 
-## Testing ⚙️
+## Stack Services
+Each service should be developed under ./services folder, e.g: 
+- my-app-auth
+- my-app-api-users
 
-PasswordLessApp is built with python, we need to go to the virtual environment to have a local context in order to install current/future dependencies.
-
-### Unit tests 🔩
-
-File ./functions/otp/test/test_unit.py: constains all unit tests for sign-up/otp requests.
-
+### Creating a new Service
+In order to create a service from MyApp template, use:
+```sh
+$ source env.sh
+$ my-app-create-service [my-app-new-service]
 ```
-$ source .env/bin/activate
-(.env)$ python3 -m unittest -v functions.otp.test.test_unit
+This command will create a new service code from stack template.
+
+
+#### Working in a service
+Each service contains a defined structure: 
+```sh
+./service
+    functions
+        feature
+            function.yml
+            lambda_function.py
+    resources
+        resource.yml
+    env.sh
+    package.json
+    serverless.yml    
+```
+In order to enable my-app-functions, use:
+```sh
+$ source env.sh
+$ npm install
+# enables: my-app-offline, my-app-package, my-app-deploy, my-app-remove
 ```
 
-### Manual / integration tests 🔩
-Deploy the stack in an specific environment.
-Use the file: 'openapi/schema.yml' to build an API client in postman.
-Replace servers.url property with the generated url of API gateway.
+#### Shared/Common code
+- ./serverless.common.yml: Contains shared configuration 
+- ./common: Contains shared base code for each service 
 
+
+### Auth dependency
+Each secured service could use the stack authentication service.
+For securing a feature, my-app-auth exports some needed parameters for other services: 
+  - ApiGatewayRestApiRootResourceId
+  - ApiGatewayAuthorizerId
+
+./services/[my-app-service]/serverless.yml
+```yml
+  apiGateway:
+    restApiId: !ImportValue ${self:cusFtom.common.currentStage}-ApiGatewayRestApiId
+    restApiRootResourceId: !ImportValue ${self:custom.common.currentStage}-MyAppRestApiRootResourceId
 ```
-$ source .env/bin/activate
-(.env)$ python3 -m unittest -v functions.otp.test.test_unit
+./services/[my-app-service]/functions/[feature]/function.yml
+```yml    
+    authorizer:
+          type: COGNITO_USER_POOLS
+          authorizerId: !ImportValue ${self:custom.common.currentStage}-MyAppAuthorizerId
 ```
+### Deployment 🔧
+```sh
+$ cd ./service/my-app-service
+$ source env.sh
+# enables: my-app-offline, my-app-package, my-app-deploy, my-app-remove
+$ my-app-package
+$ my-app-deploy
+```
+Take care: If you will use the stack authentication, first deploy my-app-auth.
 
 ## Building with 🛠️
 
@@ -79,5 +117,3 @@ $ source .env/bin/activate
 * **Pablo Atoche** - *Initial work* - [PalituxD](https://github.com/PalituxD)
 
 ## License 📄
-
-* Apache license 2.0

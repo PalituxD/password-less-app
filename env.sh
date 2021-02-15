@@ -1,16 +1,12 @@
 #! /bin/bash
-export APP_STAGE=dev
-export APP_REGION=us-east-1
-export APP_PROFILE=deploy
 
-function pl-package(){
-	sls package --package ./target/$APP_STAGE --stage $APP_STAGE -v -r $APP_REGION --aws-profile $APP_PROFILE
+function my-app-create-service() {
+  sls create --template-path ./template/ --path ./services/$1 --name $1
 }
 
-function pl-deploy(){
-	sls deploy --package ./target/$APP_STAGE --stage $APP_STAGE  -v -r $APP_REGION --aws-profile $APP_PROFILE
+function my-app-dynamodb-admin() {
+  DYNAMO_ENDPOINT=http://localhost:8000
+  ./node_modules/.bin/dynamodb-admin --port 8081 -o
 }
 
-function pl-remove(){
-	sls remove --package ./target/$APP_STAGE --stage $APP_STAGE  -v -r $APP_REGION --aws-profile $APP_PROFILE
-}
+export DIR_WORK_PATH=$(pwd)

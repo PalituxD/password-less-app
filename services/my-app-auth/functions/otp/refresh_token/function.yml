@@ -1,0 +1,19 @@
+refresh-token:
+  handler: functions/otp/refresh_token/lambda_function.handler
+  package:
+    individually: True
+    include:
+      - functions/otp/refresh_token/lambda_function.py
+    exclude:
+      - ./**
+  events:
+    - http:
+        method: POST
+        path: /auth/refresh_token
+  environment:
+    COGNITO_POOL_CLIENT_ID:
+      Ref: MyAppCognitoUserPoolClientClient
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: cognito-idp:AdminUpdateUserAttributes
+      Resource: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/*

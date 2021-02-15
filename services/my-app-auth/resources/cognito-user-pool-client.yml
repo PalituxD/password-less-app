@@ -1,0 +1,20 @@
+Resources:
+  MyAppCognitoUserPoolClientClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: ${self:custom.userPoolClientName}
+      UserPoolId:
+        Ref: MyAppCognitoUserPool
+      ExplicitAuthFlows:
+        - ALLOW_CUSTOM_AUTH
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      GenerateSecret: False
+      PreventUserExistenceErrors: "ENABLED"
+      RefreshTokenValidity: 365
+Outputs:
+  MyAppCognitoUserPoolClientClientId:
+    Value:
+      Ref: MyAppCognitoUserPoolClientClient
+    Export:
+      Name: ${self:custom.common.currentStage}-MyAppCognitoUserPoolClientClientId

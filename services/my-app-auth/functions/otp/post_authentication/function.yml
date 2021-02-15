@@ -1,0 +1,21 @@
+post-authentication:
+  handler: functions/otp/post_authentication/lambda_function.handler
+  package:
+    individually: True
+    include:
+      - functions/otp/post_authentication/lambda_function.py
+    exclude:
+      - ./**
+  events:
+    - cognitoUserPool:
+        pool: MyAppPool
+        trigger: PostAuthentication
+  environment:
+    PY_EVENTS_BUS_NAME: ${self:custom.common.pyEventBusName}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: cognito-idp:AdminUpdateUserAttributes
+      Resource: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/*
+    - Effect: "Allow"
+      Action: events:PutEvents
+      Resource: arn:aws:events:#{AWS::Region}:#{AWS::AccountId}:event-bus/${self:custom.common.pyEventBusName}

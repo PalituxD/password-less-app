@@ -1,0 +1,29 @@
+create-auth-challenge:
+  handler: functions/otp/create_auth_challenge/lambda_function.handler
+  environment:
+    SMS_MESSAGE_CODE: "MyApp: Tu codigo secreto es: ####"
+    ALTERNATIVE_SOURCE_VERIFIED_EMAIL: "alternative@test.com"
+    ALTERNATIVE_TO_VERIFIED_EMAIL: "alternative@test.com"
+    SEND_CODE_TO_ALTERNATIVE_VERIFIED_EMAIL: "True"
+  package:
+    individually: True
+    include:
+      - functions/otp/create_auth_challenge/lambda_function.py
+    exclude:
+      - ./**
+  events:
+    - cognitoUserPool:
+        pool: MyAppPool
+        trigger: CreateAuthChallenge
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - ses:SendEmail
+        - ses:SendRawEmail
+      Resource: "*"
+    - Effect: "Deny"
+      Action: sns:Publish
+      Resource: arn:aws:sns:*:*:*
+    - Effect: "Allow"
+      Action: sns:Publish
+      Resource: "*"

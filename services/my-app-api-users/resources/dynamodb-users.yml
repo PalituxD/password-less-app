@@ -1,0 +1,14 @@
+Resources:
+  TableUsers:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.common.pyTableUsers}
+      AttributeDefinitions:
+        - AttributeName: username
+          AttributeType: S
+      KeySchema:
+        - AttributeName: username
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
