@@ -1,0 +1,39 @@
+service: my-app-service
+provider:
+  name: aws
+  runtime: python3.8
+  memorySize: 128
+  timeout: 3
+  stage: ${self:custom.common.currentStage}
+  logRetentionInDays: 30
+  tracing:
+    apiGateway: true
+    lambda: true
+  iamRoleStatements:
+    - ${file(../../shared/serverless.common.yml):lambdaPolicyXRay}
+    - ${file(../../shared/serverless.common.yml):lambdaLogGroup}
+  environment:
+    LOG_ENABLED: "True"
+  apiGateway:
+    restApiId: !ImportValue ${self:custom.common.currentStage}-MyAppRestApiId
+    restApiRootResourceId: !ImportValue ${self:custom.common.currentStage}-MyAppRestApiRootResourceId
+package:
+  individually: True
+  include:
+    - common/*
+plugins:
+  - serverless-package-external
+  - serverless-offline
+  - serverless-iam-roles-per-function
+  - serverless-pseudo-parameters
+  - serverless-prune-plugin
+custom:
+  common: ${file(../../shared/serverless.common.yml):common}
+  packageExternal:
+    external:
+      - '../../shared/common'
+  serverless-iam-roles-per-function:
+    defaultInherit: true
+functions:
+  - ${file(./functions/feature/function.yml)}
+resources: []

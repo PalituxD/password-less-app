@@ -1,0 +1,21 @@
+{
+  "name": "my-app-stack",
+  "version": "1.0.0",
+  "description": "MyAppStack project builds a passwordless stack for MyApp application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/bytpher/my-app-stack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/bytpher/my-app-stack#readme",
+  "devDependencies": {
+    "dynamodb-admin": "^4.0.0",
+    "serverless": "^2.4.0"
+  }
+}

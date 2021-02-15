@@ -1,0 +1,23 @@
+feature1:
+  handler: functions/feature/lambda_function.handler
+  package:
+    individually: True
+    include:
+      - functions/feature/lambda_function.py
+    exclude:
+      - ./**
+  environment:
+    CURRENT_STAGE: ${self:custom.common.currentStage}
+  events:
+    - http:
+        method: GET
+        path: /feature1/{id}
+        request:
+          parameters:
+            paths:
+              id: true
+        authorizer:
+          type: COGNITO_USER_POOLS
+          authorizerId: !ImportValue ${self:custom.common.currentStage}-MyAppAuthorizerId
+        cors: true
+  iamRoleStatements: []

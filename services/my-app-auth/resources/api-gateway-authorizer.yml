@@ -1,0 +1,19 @@
+Resources:
+  ApiGatewayAuthorizer:
+    DependsOn:
+      - ApiGatewayRestApi
+    Type: AWS::ApiGateway::Authorizer
+    Properties:
+      Name: cognito-authorizer
+      IdentitySource: method.request.header.Authorization
+      RestApiId:
+        Ref: ApiGatewayRestApi
+      Type: COGNITO_USER_POOLS
+      ProviderARNs:
+        - Fn::GetAtt: [MyAppCognitoUserPool, Arn]
+Outputs:
+  ApiGatewayAuthorizerId:
+    Value:
+      Ref: ApiGatewayAuthorizer
+    Export:
+      Name: ${self:custom.common.currentStage}-MyAppAuthorizerId

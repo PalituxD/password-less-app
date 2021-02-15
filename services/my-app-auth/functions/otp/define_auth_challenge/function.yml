@@ -1,0 +1,12 @@
+define-auth-challenge:
+  handler: functions/otp/define_auth_challenge/lambda_function.handler
+  package:
+    individually: True
+    include:
+      - functions/otp/define_auth_challenge/lambda_function.py
+    exclude:
+      - ./**
+  events:
+    - cognitoUserPool:
+        pool: MyAppPool
+        trigger: DefineAuthChallenge

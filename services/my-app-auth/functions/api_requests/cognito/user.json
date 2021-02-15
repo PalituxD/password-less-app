@@ -1,0 +1,33 @@
+{
+    "Username": "9cc3f8f5-4a07-4b97-a13e-d9fc496d2d2b",
+    "UserAttributes": [
+        {
+            "Name": "sub",
+            "Value": "9cc3f8f5-4a07-4b97-a13e-d9fc496d2d2b"
+        },
+        {
+            "Name": "custom:custom_attribute",
+            "Value": "MY_DEVICE_KEY"
+        },
+        {
+            "Name": "phone_number_verified",
+            "Value": "false"
+        },
+        {
+            "Name": "phone_number",
+            "Value": "+51942120156"
+        }
+    ],
+    "ResponseMetadata": {
+        "RequestId": "aa7bc814-a717-4a0a-a170-99ad26aa8695",
+        "HTTPStatusCode": 200,
+        "HTTPHeaders": {
+            "date": "Tue, 18 Aug 2020 18:44:06 GMT",
+            "content-type": "application/x-amz-json-1.1",
+            "content-length": "287",
+            "connection": "keep-alive",
+            "x-amzn-requestid": "aa7bc814-a717-4a0a-a170-99ad26aa8695"
+        },
+        "RetryAttempts": 0
+    }
+}

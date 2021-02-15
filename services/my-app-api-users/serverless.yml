@@ -1,0 +1,61 @@
+service: my-app-api-users
+provider:
+  name: aws
+  runtime: python3.8
+  memorySize: 128
+  timeout: 3
+  stage: ${self:custom.common.currentStage}
+  logRetentionInDays: 30
+  tracing:
+    apiGateway: true
+    lambda: true
+  iamRoleStatements:
+    - ${file(../../shared/serverless.common.yml):lambdaPolicyXRay}
+    - ${file(../../shared/serverless.common.yml):lambdaLogGroup}
+  environment:
+    LOG_ENABLED: "True"
+    DYNAMODB_REGION: ${self:custom.common.region}
+  apiGateway:
+    restApiId: !ImportValue ${self:custom.common.currentStage}-MyAppRestApiId
+    restApiRootResourceId: !ImportValue ${self:custom.common.currentStage}-MyAppRestApiRootResourceId
+package:
+  individually: true
+  include:
+    - common/*
+plugins:
+  - serverless-python-requirements
+  - serverless-package-external
+  - serverless-dynamodb-local
+  - serverless-iam-roles-per-function
+  - serverless-pseudo-parameters
+  - serverless-prune-plugin
+  - serverless-offline
+custom:
+  common: ${file(../../shared/serverless.common.yml):common}
+  pythonRequirements:
+    layer: true
+  packageExternal:
+    external:
+      - '../../shared/common'
+  serverless-iam-roles-per-function:
+    defaultInherit: true
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      migrate: true
+      inMemory: true
+      heapInitial: 200m
+      seed: true
+      heapMax: 1g
+      convertEmptyValues: true
+    seed:
+      domain:
+        sources:
+          - table: ${self:custom.common.pyTableUsers}
+            sources: [./resources/seeds/db/users.json]
+functions:
+  - ${file(./functions/api/users/function.yml)}
+resources:
+  - ${file(./resources/dynamodb-users.yml)}

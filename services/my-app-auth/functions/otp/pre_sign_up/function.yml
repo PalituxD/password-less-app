@@ -1,0 +1,12 @@
+pre-sign-up:
+  handler: functions/otp/pre_sign_up/lambda_function.handler
+  package:
+    individually: True
+    include:
+      - functions/otp/pre_sign_up/lambda_function.py
+    exclude:
+      - ./**
+  events:
+    - cognitoUserPool:
+        pool: MyAppPool
+        trigger: PreSignUp

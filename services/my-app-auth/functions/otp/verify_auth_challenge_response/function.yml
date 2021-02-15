@@ -1,0 +1,12 @@
+verify-auth-challenge-response:
+  handler: functions/otp/verify_auth_challenge_response/lambda_function.handler
+  package:
+    individually: True
+    include:
+      - functions/otp/verify_auth_challenge_response/lambda_function.py
+    exclude:
+      - ./**
+  events:
+    - cognitoUserPool:
+        pool: MyAppPool
+        trigger: VerifyAuthChallengeResponse

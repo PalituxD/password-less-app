@@ -1,0 +1,20 @@
+common:
+  defaultStage: dev
+  region: ${opt:region, 'us-east-1'}
+  currentStage: ${opt:stage, self:custom.common.defaultStage}
+  pyEventBusName: my-app-bus-${self:custom.common.currentStage}
+  pyTableUsers: my-app-users-${self:custom.common.currentStage}
+  pyEventBusArn: arn:aws:events:#{AWS::Region}:#{AWS::AccountId}:event-bus/${self:custom.common.pyEventBusName}
+
+lambdaPolicyXRay:
+  Effect: Allow
+  Action:
+    - xray:PutTraceSegments
+    - xray:PutTelemetryRecords
+  Resource: "*"
+
+lambdaLogGroup:
+  Effect: Allow
+  Action:
+    - logs:CreateLogGroup
+  Resource: arn:aws:logs:#{AWS::Region}:#{AWS::AccountId}:log-group:/aws/lambda/*:*:*

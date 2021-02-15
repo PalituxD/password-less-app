@@ -2,24 +2,35 @@
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "PasswordLessApp",
+            "Sid": "MyAppStackDeployer",
             "Effect": "Allow",
             "Action": [
                 "iam:PassRole",
                 "iam:GetRole",
                 "iam:CreateRole",
+                "iam:GetRolePolicy",
                 "iam:PutRolePolicy",
                 "iam:DeleteRolePolicy",
                 "iam:DeleteRole",
+                "iam:CreateServiceLinkedRole",
                 "cognito-idp:CreateUserPool",
                 "cognito-idp:DeleteUserPool",
+                "cognito-idp:UpdateUserPool",
                 "cognito-idp:CreateUserPoolClient",
                 "cognito-idp:DeleteUserPoolClient",
+                "cognito-idp:ListTagsForResource",
+                "dynamodb:UpdateTable",
+                "dynamodb:ListTables",
+                "dynamodb:DeleteTable",
+                "dynamodb:CreateTable",
+                "dynamodb:DescribeTable",
                 "lambda:*",
                 "logs:*",
                 "s3:*",
+                "xray:*",
                 "apigateway:*",
-                "cloudformation:*"
+                "cloudformation:*",
+                "events:*"
             ],
             "Resource": "*"
         }

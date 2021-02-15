@@ -1,0 +1,28 @@
+{
+  "name": "my-app-auth",
+  "version": "1.0.0",
+  "description": "MyAppAuth project builds a passwordless stack for MyApp application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/bytpher/my-app-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/bytpher/my-app-api#readme",
+  "devDependencies": {
+    "serverless-offline": "^6.8.0",
+    "serverless-package-external": "^1.3.3",
+    "serverless-dynamodb-local": "^0.2.39"
+  },
+  "dependencies": {
+    "serverless-iam-roles-per-function": "^2.0.2",
+    "serverless-plugin-tracing": "^2.0.0",
+    "serverless-prune-plugin": "^1.4.3",
+    "serverless-pseudo-parameters": "^2.5.0"
+  }
+}

@@ -1,0 +1,112 @@
+users-put:
+  handler: functions/api/users/lambda_function.handler_put
+  layers:
+    - {Ref: PythonRequirementsLambdaLayer}
+  timeout: 15
+  package:
+    individually: True
+    include:
+      - functions/api/users/lambda_function.py
+      - functions/api/users/models.py
+    exclude:
+      - ./**
+  environment:
+    PY_TABLE_USERS: ${self:custom.common.pyTableUsers}
+  events:
+    - eventBridge:
+        eventBus: ${self:custom.common.pyEventBusArn}
+        pattern:
+          source:
+            - py.auth
+          detail-type:
+            - py.api.user.creation
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:DescribeTable
+      Resource:
+        Fn::GetAtt: [TableUsers, Arn]
+
+users-get:
+  handler: functions/api/users/lambda_function.handler_get
+  layers:
+    - {Ref: PythonRequirementsLambdaLayer}
+  timeout: 15
+  package:
+    individually: True
+    include:
+      - functions/api/users/lambda_function.py
+      - functions/api/users/models.py
+    exclude:
+      - ./**
+  environment:
+    PY_TABLE_USERS: ${self:custom.common.pyTableUsers}
+  events:
+    - http:
+        method: GET
+        path: /user/{userId}
+        request:
+          parameters:
+            paths:
+              userId: false
+        authorizer:
+          type: COGNITO_USER_POOLS
+          authorizerId: !ImportValue ${self:custom.common.currentStage}-MyAppAuthorizerId
+        cors: true
+    - http:
+        method: GET
+        path: /user
+        authorizer:
+          type: COGNITO_USER_POOLS
+          authorizerId: !ImportValue ${self:custom.common.currentStage}-MyAppAuthorizerId
+        cors: true
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:DescribeTable
+      Resource:
+        Fn::GetAtt: [TableUsers, Arn]
+
+users-post:
+  handler: functions/api/users/lambda_function.handler_post
+  layers:
+    - {Ref: PythonRequirementsLambdaLayer}
+  timeout: 15
+  package:
+    individually: True
+    include:
+      - functions/api/users/lambda_function.py
+      - functions/api/users/models.py
+    exclude:
+      - ./**
+  environment:
+    PY_TABLE_USERS: ${self:custom.common.pyTableUsers}
+  events:
+    - http:
+        method: POST
+        path: /user/{userId}
+        request:
+          parameters:
+            paths:
+              userId: false
+        authorizer:
+          type: COGNITO_USER_POOLS
+          authorizerId: !ImportValue ${self:custom.common.currentStage}-MyAppAuthorizerId
+    - http:
+        method: POST
+        path: /user
+        authorizer:
+          type: COGNITO_USER_POOLS
+          authorizerId: !ImportValue ${self:custom.common.currentStage}-MyAppAuthorizerId
+        cors: true
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:DescribeTable
+      Resource:
+        Fn::GetAtt: [TableUsers, Arn]
