@@ -1,0 +1,16 @@
+# package directories
+node_modules
+jspm_packages
+package-lock.json
+poetry.lock
+
+# Working directories
+.serverless
+.env
+.idea
+.vscode
+.dynamodb
+target
+__pycache__
+*.tar.gz
+*any.whl
